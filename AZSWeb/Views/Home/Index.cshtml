@@ -1,0 +1,48 @@
+﻿@model List<AZSWeb.Models.Station>
+@Scripts.Render("~/scripts/Chart.js")
+
+@{
+    ViewBag.Title = "Home Page";
+    AjaxOptions ajaxOptions = new AjaxOptions
+    {
+        UpdateTargetId = "StInfo"
+    };
+}
+
+
+<body>
+    <h3>Добавить в базу</h3>
+    @using (Html.BeginForm("Upload", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <input type="file" name="upload" multiple="multiple" /><br>
+        <input type="submit" value="Загрузить" />
+    }
+    @Html.Partial("Charts");
+
+
+    @using (Html.BeginForm("GetBonus", "Home"))
+    {
+        <input type="submit" value="Отчет: бонусы">
+    }
+    @using (Ajax.BeginForm("GetPairs", ajaxOptions))
+    {
+        <select id="StationID" name="StationID">
+            @foreach (AZSWeb.Models.Station st in Model)
+            {
+                <option value="@st.ID">АЗС №@st.ID</option>
+            }
+         
+        </select>
+        <input type="submit" value="Выбрать">
+    }
+    <div id="StInfo" name="StInfo">
+            @{Html.RenderAction("GetPairs");}
+    </div>
+
+</body>
+
+
+
+
+
+

@@ -1,0 +1,44 @@
+﻿@model IEnumerable<AZSWeb.Models.Station>
+
+<h3>Отчетность</h3>
+<canvas id="Chart3" width="400" height="100"></canvas>
+<script>
+        var ctxx = document.getElementById("Chart3").getContext('2d');
+        var Chart3 = new Chart(ctxx, {
+            type: 'doughnut',
+            data: {
+                labels: [ @Html.Raw(AZSWeb.Alghoritms.Chart.GetStations(Model)) ],
+                datasets: [{
+                    label: 'Количество Смен',
+                    data: [@Html.Raw(AZSWeb.Alghoritms.Chart.GetStationsPairs(Model))],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(255, 153, 0, 1)',
+                        'rgba(255, 204, 153, 1)',
+                        'rgba(255, 102, 51, 1)',
+                        'rgba(255, 102, 204, 1)',
+                        'rgba(204, 102, 255, 1)',
+                        'rgba(0, 102, 255, 1)',
+                    ],
+
+                    borderWidth: 1
+                },
+                {
+                    label: 'Количество Транзакций',
+                    data: [@Html.Raw(AZSWeb.Alghoritms.Chart.GetStationsPairsTransactions(Model))],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(255, 153, 0, 1)',
+                        'rgba(255, 204, 153, 1)',
+                        'rgba(255, 102, 51, 1)',
+                        'rgba(255, 102, 204, 1)',
+                        'rgba(204, 102, 255, 1)',
+                        'rgba(0, 102, 255, 1)',
+                    ],
+
+                    borderWidth: 1
+                }]
+            }
+
+        });
+</script>

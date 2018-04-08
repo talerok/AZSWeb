@@ -1,0 +1,15 @@
+﻿@model AZSWeb.Models.User
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<body>
+    <div class="LoginPanel">
+        <form method="POST">
+            <input type="text" name="Name" placeholder="Login" value="@Model.Name">
+            <input type="password" name="Hashpass" placeholder="Password" , value="@Model.Pass">
+            <button type="submit">Login</button>
+        </form>
+</div>
+</body>

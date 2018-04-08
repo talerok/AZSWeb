@@ -1,0 +1,87 @@
+﻿@model AZSWeb.Models.Station
+@if (Model != null)
+{
+    using (Html.BeginForm("GetReport", "Home"))
+    {
+    <h2>АЗС № @Model.ID</h2>
+    <select id="pairID" name="pairID">
+        <option value="@(Model.ID * -1)">Сводный отчет</option>
+        @foreach (AZSWeb.Models.Pair pair in Model.Pairs)
+        {
+        <option value="@pair.ID">@pair.Start</option>
+        }
+    </select>
+    <input type="submit" value="Скачать">
+    }
+
+    <canvas id="Chart1" width="400" height="100"></canvas>
+    <canvas id="Chart2" width="400" height="100"></canvas>
+    <script>
+        var ctx = document.getElementById("Chart1").getContext('2d');
+        var Chart1 = new Chart(ctx, {
+                type: 'line',
+                data: {
+                labels: [ @Html.Raw(AZSWeb.Alghoritms.Chart.GetPairs(Model)) ],
+                    datasets: [{
+                        label: 'Количество транзакций за смену',
+                        data: [@Html.Raw(AZSWeb.Alghoritms.Chart.GetPairsTransactions(Model))],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255,99,132,1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                            }
+                }]
+                    }
+        }
+    });
+
+        ctx = document.getElementById("Chart2").getContext('2d');
+        var Chart2 = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [ @Html.Raw(AZSWeb.Alghoritms.Chart.GetPairs(Model)) ],
+                datasets: [{
+                    label: 'Отмененные после вылива',
+                    data: [@Html.Raw(AZSWeb.Alghoritms.Chart.GetPairsFakeOrders(Model))],
+                    backgroundColor: [
+                        'rgba(80, 99, 132, 0.5)'
+                    ],
+                    borderColor: [
+                        'rgba(80,99,132,1)'
+                    ],
+                    borderWidth: 1
+                },
+                {
+                    label: 'Добитые чеки',
+                    data: [@Html.Raw(AZSWeb.Alghoritms.Chart.GetPairsFakeChecks(Model))],
+                    backgroundColor: [
+                        'rgba(80, 150, 150, 0.5)'
+                    ],
+                    borderColor: [
+                        'rgba(80,150,150,1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+}
